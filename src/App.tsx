@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
+
 import './App.css';
+import { MsalAuthenticationTemplate, MsalProvider } from '@azure/msal-react';
+import { msalInstance } from './app/auth/msalProvider';
+import { InteractionType } from '@azure/msal-browser';
+import * as Config from './app/auth/config';
+import Main from './Main';
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MsalProvider instance={msalInstance}>
+      <MsalAuthenticationTemplate
+        interactionType={InteractionType.Redirect}
+        authenticationRequest={{
+          scopes: Config.environment[window.location.host].scopes,
+        }}
+      >
+        <Main/>
+      </MsalAuthenticationTemplate>
+    </MsalProvider>
   );
 }
+
+
 
 export default App;
